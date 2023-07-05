@@ -1,0 +1,166 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Account {
+    private int accountId;
+    private String accountName;
+    private double balance;
+
+    public Account(int accountId, String accountName, double balance) {
+        this.accountId = accountId;
+        this.accountName = accountName;
+        this.balance = balance;
+    }
+
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+}
+
+class AccountManager {
+    private List<Account> accounts;
+    private int nextAccountId;
+
+    public AccountManager() {
+        accounts = new ArrayList<>();
+        nextAccountId = 1;
+    }
+
+    public void createAccount(String accountName, double balance) {
+        Account account = new Account(nextAccountId, accountName, balance);
+        accounts.add(account);
+        nextAccountId++;
+        System.out.println("Account created successfully!");
+    }
+
+    public Account findAccountById(int accountId) {
+        for (Account account : accounts) {
+            if (account.getAccountId() == accountId) {
+                return account;
+            }
+        }
+        return null;
+    }
+
+    public void updateAccountName(int accountId, String newAccountName) {
+        Account account = findAccountById(accountId);
+        if (account != null) {
+            account.setAccountName(newAccountName);
+            System.out.println("Account name updated successfully!");
+        } else {
+            System.out.println("Account not found!");
+        }
+    }
+
+    public void updateAccountBalance(int accountId, double newBalance) {
+        Account account = findAccountById(accountId);
+        if (account != null) {
+            account.setBalance(newBalance);
+            System.out.println("Account balance updated successfully!");
+        } else {
+            System.out.println("Account not found!");
+        }
+    }
+
+    public void deleteAccount(int accountId) {
+        Account account = findAccountById(accountId);
+        if (account != null) {
+            accounts.remove(account);
+            System.out.println("Account deleted successfully!");
+        } else {
+            System.out.println("Account not found!");
+        }
+    }
+
+    public void displayAllAccounts() {
+        if (accounts.isEmpty()) {
+            System.out.println("No accounts found!");
+        } else {
+            System.out.println("Account Details:");
+            for (Account account : accounts) {
+                System.out.println("Account ID: " + account.getAccountId());
+                System.out.println("Account Name: " + account.getAccountName());
+                System.out.println("Account Balance: " + account.getBalance());
+                System.out.println("--------------------------");
+            }
+        }
+    }
+}
+
+public class AccountManagementSystem {
+    public static void main(String[] args) {
+        AccountManager accountManager = new AccountManager();
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("Account Management System");
+            System.out.println("1. Create Account");
+            System.out.println("2. Update Account Name");
+            System.out.println("3. Update Account Balance");
+            System.out.println("4. Delete Account");
+            System.out.println("5. Display All Accounts");
+            System.out.println("6. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter account name: ");
+                    scanner.nextLine(); // Consume the newline character
+                    String accountName = scanner.nextLine();
+                    System.out.print("Enter initial balance: ");
+                    double balance = scanner.nextDouble();
+                    accountManager.createAccount(accountName, balance);
+                    break;
+                case 2:
+                    System.out.print("Enter account ID: ");
+                    int accountIdToUpdate = scanner.nextInt();
+                    System.out.print("Enter new account name: ");
+                    scanner.nextLine(); // Consume the newline character
+                    String newAccountName = scanner.nextLine();
+                    accountManager.updateAccountName(accountIdToUpdate, newAccountName);
+                    break;
+                case 3:
+                    System.out.print("Enter account ID: ");
+                    int accountIdToUpdateBalance = scanner.nextInt();
+                    System.out.print("Enter new account balance: ");
+                    double newBalance = scanner.nextDouble();
+                    accountManager.updateAccountBalance(accountIdToUpdateBalance, newBalance);
+                    break;
+                case 4:
+                    System.out.print("Enter account ID to delete: ");
+                    int accountIdToDelete = scanner.nextInt();
+                    accountManager.deleteAccount(accountIdToDelete);
+                    break;
+                case 5:
+                    accountManager.displayAllAccounts();
+                    break;
+                case 6:
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid choice! Please try again.");
+                    break;
+            }
+        }
+    }
+}
